@@ -1,17 +1,18 @@
 package org.example.converters;
 
 import org.example.automatons.Automaton;
+import org.example.automatons.EpsNonDeterministicAutomaton;
+import org.example.automatons.NonDeterministicAutomaton;
 
 import java.util.*;
 
-//TODO
-public class EpsNonDetToNonDetConverter extends Converter{
-    protected EpsNonDetToNonDetConverter(Automaton automaton) {
+public class EpsNonDetToNonDetConverter extends Converter<EpsNonDeterministicAutomaton, NonDeterministicAutomaton>{
+    protected EpsNonDetToNonDetConverter(EpsNonDeterministicAutomaton automaton) {
         super(automaton);
     }
 
     @Override
-    public Automaton convert() {
+    public NonDeterministicAutomaton convert() {
         for(String state : automaton.getTransitionTable().keySet()){
             unionStatesInEpsilonClosure(findEpsilonClosure(state));
         }
@@ -41,5 +42,10 @@ public class EpsNonDetToNonDetConverter extends Converter{
                 unionStates(epsList.getFirst(), epsList.getLast());
             }
         }
+    }
+
+    @Override
+    protected NonDeterministicAutomaton initNewAutomaton() {
+        return null;
     }
 }

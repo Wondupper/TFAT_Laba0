@@ -7,18 +7,19 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-//TODO
-public abstract class Converter {
-    protected Automaton automaton;
+public abstract class Converter<T extends Automaton,E extends Automaton> {
+    protected T automaton;
 
-    protected Converter(Automaton automaton) {
+    protected Converter(T automaton) {
         this.automaton = automaton;
     }
 
-    public abstract Automaton convert();
+    public abstract E convert();
+
+    protected abstract E initNewAutomaton();
 
     protected void unionStates(String state1, String state2){
-        String newState = state1+state2;
+        String newState = state1+";"+state2;
         Map<String, Set<String>> newMap = new HashMap<>();
         Set<String> newKeys = new HashSet<>();
         newKeys.addAll(automaton.getTransitionTable().get(state1).keySet());

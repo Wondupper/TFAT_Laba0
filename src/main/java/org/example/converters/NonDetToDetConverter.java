@@ -1,17 +1,17 @@
 package org.example.converters;
 
 import org.example.automatons.Automaton;
+import org.example.automatons.DeterministicAutomaton;
+import org.example.automatons.NonDeterministicAutomaton;
 
-//TODO
-public class NonDetToDetConverter extends Converter{
-    protected NonDetToDetConverter(Automaton automaton) {
+public class NonDetToDetConverter extends Converter<NonDeterministicAutomaton, DeterministicAutomaton>{
+    protected NonDetToDetConverter(NonDeterministicAutomaton automaton) {
         super(automaton);
     }
 
     @Override
     public Automaton convert() {
-        String currentState;
-        return automaton;
+        return null;
     }
 
 }

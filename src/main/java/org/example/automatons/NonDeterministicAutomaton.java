@@ -6,8 +6,11 @@ import java.util.Map;
 import java.util.Set;
 
 public class NonDeterministicAutomaton extends Automaton{
+    protected Map<String, Map<String, Set<String>>> transitionTable;
+
     protected NonDeterministicAutomaton(Set<String> states, Set<String> alphabet, String startState, Set<String> finalStates, Map<String, Map<String, Set<String>>> transitionTable) {
-        super(states, alphabet, startState, finalStates, transitionTable);
+        super(states, alphabet, startState, finalStates);
+        this.transitionTable=transitionTable;
     }
 
     @Override
