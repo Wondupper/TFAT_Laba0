@@ -1,0 +1,21 @@
+{
+  "type" : "DKA",
+  "states": ["a","b","c"],
+  "alphabet": ["1","0"],
+  "startState": "a",
+  "finalStates": ["b","c"],
+  "transitionTable": {
+    "a": {
+      "0": ["a"],
+      "1": ["c"]
+    },
+    "b": {
+      "0": ["c"],
+      "1": ["a"]
+    },
+    "c": {
+      "0": ["c"],
+      "1": ["b"]
+    }
+  }
+}

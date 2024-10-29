@@ -16,11 +16,25 @@ public abstract class Automaton {
 
     protected Set<String> finalStates;
 
-    protected Automaton(Set<String> states, Set<String> alphabet, String startState, Set<String> finalStates) {
+    protected Map<String, Map<String, Set<String>>> transitionTable;
+
+    protected Automaton(Set<String> states, Set<String> alphabet, String startState, Set<String> finalStates, Map<String, Map<String, Set<String>>> transitionTable) {
         this.states = states;
         this.alphabet = alphabet;
         this.startState = startState;
         this.finalStates = finalStates;
+        this.transitionTable = transitionTable;
+    }
+
+    protected Automaton(Automaton automaton){
+        this.states = automaton.states;
+        this.alphabet = automaton.alphabet;
+        this.startState = automaton.startState;
+        this.finalStates = automaton.finalStates;
+        this.transitionTable = automaton.transitionTable;
+    }
+
+    protected Automaton() {
     }
 
     public abstract boolean runAutomaton(List<String> input);
