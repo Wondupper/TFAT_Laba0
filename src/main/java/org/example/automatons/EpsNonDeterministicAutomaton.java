@@ -17,13 +17,16 @@ public class EpsNonDeterministicAutomaton extends Automaton {
 
     @Override
     public boolean runAutomaton(List<String> input) {
-        Set<String> currentStates = new HashSet<>();
+        Set<String> currentStates = new LinkedHashSet<>();
         currentStates.add(this.getStartState());
         currentStates = goByEpsilon(this.getStartState());
         for (String symbol : input) {
             if (alphabet.contains(symbol)) {
-                Set<String> newCurrentStates = new HashSet<>();
-                Set<String> visitedStates = new HashSet<>();
+                System.out.println("Новая итерация");
+                System.out.println("Текущие состояния: "+currentStates);
+                System.out.println("Входной символ: "+symbol);
+                Set<String> newCurrentStates = new LinkedHashSet<>();
+                Set<String> visitedStates = new LinkedHashSet<>();
                 for(String currentState : currentStates) {
                     if (transitionTable.get(currentState).containsKey(symbol)) {
                         newCurrentStates.addAll(transitionTable.get(currentState).get(symbol));
@@ -37,6 +40,7 @@ public class EpsNonDeterministicAutomaton extends Automaton {
                     Set<String> addedStates = goByEpsilon(state);
                     currentStates.addAll(addedStates);
                 }
+                System.out.println("Переход в состояния: "+currentStates);
             } else {
                 return false;
             }
@@ -48,14 +52,14 @@ public class EpsNonDeterministicAutomaton extends Automaton {
     }
 
     private Set<String> goByEpsilon(String currentState) {
-        Set<String> currentStates = new HashSet<>();
+        Set<String> currentStates = new LinkedHashSet<>();
         Queue<String> states = new LinkedList<>();
         states.add(currentState);
         while (!states.isEmpty()) {
             currentState = states.poll();
             currentStates.add(currentState);
             if (transitionTable.get(currentState).containsKey("e")) {
-                Set<String> newCurrentStates = new HashSet<>();
+                Set<String> newCurrentStates = new LinkedHashSet<>();
                 for (String state : transitionTable.get(currentState).get("e")) {
                     newCurrentStates.add(state);
                     states.add(state);

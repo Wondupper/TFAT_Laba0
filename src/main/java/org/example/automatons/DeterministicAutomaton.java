@@ -22,10 +22,13 @@ public class DeterministicAutomaton extends Automaton {
     public boolean runAutomaton(List<String> input) {
         String currentState = this.getStartState();
         for (String symbol : input) {
-            System.out.println(currentState);
+            System.out.println("Новая итерация");
+            System.out.println("Текущее состояние: "+currentState);
+            System.out.println("Входной символ: "+currentState);
             if (alphabet.contains(symbol)) {
                 if (transitionTable.get(currentState).containsKey(symbol)) {
                     currentState = transitionTable.get(currentState).get(symbol).stream().toList().getFirst();
+                    System.out.println("Переход в состояние: "+currentState);
                 }
             } else {
                 return false;

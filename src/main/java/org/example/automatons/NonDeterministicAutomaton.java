@@ -1,6 +1,6 @@
 package org.example.automatons;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -20,12 +20,15 @@ public class NonDeterministicAutomaton extends Automaton{
 
     @Override
     public boolean runAutomaton(List<String> input) {
-        Set<String> currentStates = new HashSet<>();
+        Set<String> currentStates = new LinkedHashSet<>();
         currentStates.add(this.getStartState());
         for(String symbol:input){
             if(alphabet.contains(symbol)) {
-                Set<String> newCurrentStates = new HashSet<>();
-                Set<String> visitedStates = new HashSet<>();
+                System.out.println("Новая итерация");
+                System.out.println("Текущие состояния: "+currentStates);
+                System.out.println("Входной символ: "+symbol);
+                Set<String> newCurrentStates = new LinkedHashSet<>();
+                Set<String> visitedStates = new LinkedHashSet<>();
                 for(String currentState : currentStates) {
                     if (transitionTable.get(currentState).containsKey(symbol)) {
                         newCurrentStates.addAll(transitionTable.get(currentState).get(symbol));
@@ -36,6 +39,7 @@ public class NonDeterministicAutomaton extends Automaton{
                 }
                 currentStates.removeAll(visitedStates);
                 currentStates.addAll(newCurrentStates);
+                System.out.println("Переход в состояния: "+currentStates);
             }else{
                 return false;
             }
