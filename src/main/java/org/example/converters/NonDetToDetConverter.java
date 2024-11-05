@@ -49,7 +49,7 @@ public class NonDetToDetConverter extends Converter<NonDeterministicAutomaton, D
                 }
             }
         }
-        updateNewAutomaton(newAutomaton,startSet,terminalSets);
+        updateNewAutomaton(newAutomaton, startSet, terminalSets);
         return newAutomaton;
     }
 
@@ -68,37 +68,42 @@ public class NonDetToDetConverter extends Converter<NonDeterministicAutomaton, D
         transitionTableWithSets.clear();
     }
 
-    private void updateNewAutomaton(DeterministicAutomaton newAautomaton, Set<String> startSet, Set<Set<String>> finalSets){
+    private void updateNewAutomaton(DeterministicAutomaton newAautomaton, Set<String> startSet, Set<Set<String>> finalSets) {
         newAautomaton.setStartState(setToString(startSet));
 
-        for(Set<String> set : finalSets){
+        for (Set<String> set : finalSets) {
             newAautomaton.getFinalStates().add(setToString(set));
         }
 
         newAautomaton.getAlphabet().addAll(automaton.getAlphabet());
 
-        for(Set<String> key : transitionTableWithSets.keySet()){
+        for (Set<String> key : transitionTableWithSets.keySet()) {
             newAautomaton.getStates().add(setToString(key));
         }
 
-        for(Set<String> key : transitionTableWithSets.keySet()){
+        for (Set<String> key : transitionTableWithSets.keySet()) {
             newAautomaton.getTransitionTable().put(setToString(key), new LinkedHashMap<>());
-            for(String symbol : transitionTableWithSets.get(key).keySet()){
-                newAautomaton.getTransitionTable().get(setToString(key)).put(symbol,new LinkedHashSet<>());
+            for (String symbol : transitionTableWithSets.get(key).keySet()) {
+                newAautomaton.getTransitionTable().get(setToString(key)).put(symbol, new LinkedHashSet<>());
                 Set<String> singleSet = new LinkedHashSet<>();
                 singleSet.add(setToString(transitionTableWithSets.get(key).get(symbol)));
-                newAautomaton.getTransitionTable().get(setToString(key)).put(symbol,new LinkedHashSet<>());
-                newAautomaton.getTransitionTable().get(setToString(key)).get(symbol).add(setToString(singleSet));
+                if (!setToString(singleSet).isEmpty()) {
+                    newAautomaton.getTransitionTable().get(setToString(key)).put(symbol, new LinkedHashSet<>());
+                    newAautomaton.getTransitionTable().get(setToString(key)).get(symbol).add(setToString(singleSet));
+                }
+                if(newAautomaton.getTransitionTable().get(setToString(key)).get(symbol).isEmpty()){
+                    newAautomaton.getTransitionTable().get(setToString(key)).remove(symbol);
+                }
             }
         }
     }
 
-    private String setToString(Set<String> set){
+    private String setToString(Set<String> set) {
         StringBuilder stringBuilder = new StringBuilder();
-        for(String state : set){
+        for (String state : set) {
             stringBuilder.append(state).append(";");
         }
-        stringBuilder.deleteCharAt(stringBuilder.length()-1);
+        if (!stringBuilder.toString().isEmpty()) stringBuilder.deleteCharAt(stringBuilder.length() - 1);
         return stringBuilder.toString();
     }
 }
