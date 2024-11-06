@@ -38,7 +38,6 @@ public class EpsNonDetToNonDetConverter extends Converter<EpsNonDeterministicAut
                 }
             }
         }
-        System.out.println("Состояние: "+targetState+" . "+"Эпсилон замыкание: "+epsilonClosure);
         return epsilonClosure;
     }
 

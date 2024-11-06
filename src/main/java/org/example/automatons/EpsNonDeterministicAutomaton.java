@@ -24,6 +24,10 @@ public class EpsNonDeterministicAutomaton extends Automaton {
             if (alphabet.contains(symbol)) {
                 System.out.println("Новая итерация");
                 System.out.println("Текущие состояния: "+currentStates);
+                System.out.println("Эпсилон замыкания для текущих состояний");
+                for(String state : currentStates){
+                    findEpsilonClosure(state);
+                }
                 System.out.println("Входной символ: "+symbol);
                 Set<String> newCurrentStates = new LinkedHashSet<>();
                 Set<String> visitedStates = new LinkedHashSet<>();
@@ -69,5 +73,22 @@ public class EpsNonDeterministicAutomaton extends Automaton {
             }
         }
         return currentStates;
+    }
+
+    private void findEpsilonClosure(String targetState) {
+        Set<String> epsilonClosure = new LinkedHashSet<>();
+        Queue<String> queue = new LinkedList<>();
+        queue.add(targetState);
+        while (!queue.isEmpty()) {
+            String currentState = queue.poll();
+            epsilonClosure.add(targetState);
+            if (transitionTable.get(currentState).containsKey("e")) {
+                for (String state : transitionTable.get(currentState).get("e")) {
+                    queue.add(state);
+                    epsilonClosure.add(state);
+                }
+            }
+        }
+        System.out.println("Состояние: "+targetState+" . "+"Эпсилон замыкание: "+epsilonClosure);
     }
 }
