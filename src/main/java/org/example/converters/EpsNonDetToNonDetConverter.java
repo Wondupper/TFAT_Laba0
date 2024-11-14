@@ -30,7 +30,7 @@ public class EpsNonDetToNonDetConverter extends Converter<EpsNonDeterministicAut
         queue.add(targetState);
         while (!queue.isEmpty()) {
             String currentState = queue.poll();
-            epsilonClosure.add(targetState);
+            epsilonClosure.add(currentState);
             if (automaton.getTransitionTable().get(currentState).containsKey("e")) {
                 for (String state : automaton.getTransitionTable().get(currentState).get("e")) {
                     queue.add(state);

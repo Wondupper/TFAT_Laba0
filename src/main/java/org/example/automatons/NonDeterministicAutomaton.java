@@ -28,17 +28,16 @@ public class NonDeterministicAutomaton extends Automaton{
                 System.out.println("Текущие состояния: "+currentStates);
                 System.out.println("Входной символ: "+symbol);
                 Set<String> newCurrentStates = new LinkedHashSet<>();
-                Set<String> visitedStates = new LinkedHashSet<>();
                 for(String currentState : currentStates) {
-                    if (transitionTable.get(currentState).containsKey(symbol)) {
+                    if (transitionTable.get(currentState) != null && transitionTable.get(currentState).containsKey(symbol)) {
                         newCurrentStates.addAll(transitionTable.get(currentState).get(symbol));
-                        visitedStates.add(currentState);
-                    }else{
+                    }else if(transitionTable.get(currentState) != null && !transitionTable.get(currentState).containsKey(symbol)){
                         newCurrentStates.add(currentState);
                     }
                 }
-                currentStates.removeAll(visitedStates);
-                currentStates.addAll(newCurrentStates);
+                if (!newCurrentStates.isEmpty()) {
+                    currentStates = newCurrentStates;
+                }
                 System.out.println("Переход в состояния: "+currentStates);
             }else{
                 return false;
