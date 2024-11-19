@@ -17,26 +17,27 @@ public class EpsNonDeterministicAutomaton extends Automaton {
 
     @Override
     public boolean runAutomaton(List<String> input) {
+        if(input.isEmpty()) return false;
         Set<String> currentStates = new LinkedHashSet<>();
         currentStates.add(startState);
-        findEpsilonClosure(startState);
         for(String symbol:input){
             if(alphabet.contains(symbol)) {
                 System.out.println("Новая итерация");
                 System.out.println("Текущие состояния: "+currentStates);
                 System.out.println("Входной символ: "+symbol);
+                for(String state : currentStates){
+                    currentStates.addAll(findEpsilonClosure(state));
+                }
                 Set<String> newCurrentStates = new LinkedHashSet<>();
                 for(String currentState : currentStates) {
-                    findEpsilonClosure(currentState);
                     if (transitionTable.get(currentState) != null && transitionTable.get(currentState).containsKey(symbol)) {
                         newCurrentStates.addAll(transitionTable.get(currentState).get(symbol));
-                    }else if(transitionTable.get(currentState) != null && !transitionTable.get(currentState).containsKey(symbol)){
-                        newCurrentStates.add(currentState);
                     }
                 }
-                if (!newCurrentStates.isEmpty()) {
-                    currentStates = newCurrentStates;
+                if (newCurrentStates.isEmpty()) {
+                    return false;
                 }
+                currentStates = newCurrentStates;
                 System.out.println("Переход в состояния: "+currentStates);
             }else{
                 return false;

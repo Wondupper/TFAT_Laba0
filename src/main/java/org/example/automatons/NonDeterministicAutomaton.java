@@ -31,13 +31,12 @@ public class NonDeterministicAutomaton extends Automaton{
                 for(String currentState : currentStates) {
                     if (transitionTable.get(currentState) != null && transitionTable.get(currentState).containsKey(symbol)) {
                         newCurrentStates.addAll(transitionTable.get(currentState).get(symbol));
-                    }else if(transitionTable.get(currentState) != null && !transitionTable.get(currentState).containsKey(symbol)){
-                        newCurrentStates.add(currentState);
                     }
                 }
-                if (!newCurrentStates.isEmpty()) {
-                    currentStates = newCurrentStates;
+                if (newCurrentStates.isEmpty()) {
+                    return false;
                 }
+                currentStates = newCurrentStates;
                 System.out.println("Переход в состояния: "+currentStates);
             }else{
                 return false;
