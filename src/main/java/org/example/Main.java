@@ -10,6 +10,7 @@ import org.example.converters.NonDetToDetConverter;
 import org.example.io.AutomatonToJson;
 import org.example.io.JsonToAutomaton;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;

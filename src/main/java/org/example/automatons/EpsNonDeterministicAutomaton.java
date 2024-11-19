@@ -17,27 +17,28 @@ public class EpsNonDeterministicAutomaton extends Automaton {
 
     @Override
     public boolean runAutomaton(List<String> input) {
-        Set<String> currentStates = new LinkedHashSet<>(getFinalEpsilonStates(this.getStartState()));
-        for (String symbol : input) {
-            if (alphabet.contains(symbol)) {
+        Set<String> currentStates = new LinkedHashSet<>();
+        currentStates.add(startState);
+        findEpsilonClosure(startState);
+        for(String symbol:input){
+            if(alphabet.contains(symbol)) {
                 System.out.println("Новая итерация");
                 System.out.println("Текущие состояния: "+currentStates);
                 System.out.println("Входной символ: "+symbol);
                 Set<String> newCurrentStates = new LinkedHashSet<>();
-                for (String currentState : currentStates) {
+                for(String currentState : currentStates) {
+                    findEpsilonClosure(currentState);
                     if (transitionTable.get(currentState) != null && transitionTable.get(currentState).containsKey(symbol)) {
-                        for (String nextState : transitionTable.get(currentState).get(symbol)) {
-                            newCurrentStates.addAll(getFinalEpsilonStates(nextState));
-                        }
+                        newCurrentStates.addAll(transitionTable.get(currentState).get(symbol));
                     }else if(transitionTable.get(currentState) != null && !transitionTable.get(currentState).containsKey(symbol)){
-                        newCurrentStates.addAll(getFinalEpsilonStates(currentState));
+                        newCurrentStates.add(currentState);
                     }
                 }
                 if (!newCurrentStates.isEmpty()) {
                     currentStates = newCurrentStates;
                 }
                 System.out.println("Переход в состояния: "+currentStates);
-            } else {
+            }else{
                 return false;
             }
         }
@@ -68,17 +69,5 @@ public class EpsNonDeterministicAutomaton extends Automaton {
 
         System.out.println("Состояние: "+targetState+" . "+"Эпсилон замыкание: "+epsilonClosure);
         return epsilonClosure;
-    }
-
-    private Set<String> getFinalEpsilonStates(String state) {
-        Set<String> epsilonClosure = findEpsilonClosure(state);
-        Set<String> finalEpsilonStates = new LinkedHashSet<>();
-
-        for (String s : epsilonClosure) {
-            if (transitionTable.get(s) == null || !transitionTable.get(s).containsKey("e")) {
-                finalEpsilonStates.add(s);
-            }
-        }
-        return finalEpsilonStates;
     }
 }
