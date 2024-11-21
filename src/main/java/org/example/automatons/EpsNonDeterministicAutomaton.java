@@ -17,36 +17,46 @@ public class EpsNonDeterministicAutomaton extends Automaton {
 
     @Override
     public boolean runAutomaton(List<String> input) {
-        if(input.isEmpty()) return false;
         Set<String> currentStates = new LinkedHashSet<>();
         currentStates.add(startState);
-        for(String symbol:input){
-            if(alphabet.contains(symbol)) {
-                System.out.println("Новая итерация");
-                System.out.println("Текущие состояния: "+currentStates);
-                System.out.println("Входной символ: "+symbol);
-                for(String state : currentStates){
-                    currentStates.addAll(findEpsilonClosure(state));
-                }
-                Set<String> newCurrentStates = new LinkedHashSet<>();
-                for(String currentState : currentStates) {
-                    if (transitionTable.get(currentState) != null && transitionTable.get(currentState).containsKey(symbol)) {
-                        newCurrentStates.addAll(transitionTable.get(currentState).get(symbol));
+        if(input.isEmpty() || (input.size()==1 && input.contains(""))){
+            System.out.println("Текущие состояния: " + currentStates);
+            for(String state : currentStates){
+                currentStates.addAll(findEpsilonClosure(state));
+            }
+            for (String state : currentStates) {
+                if (finalStates.contains(state)) return true;
+            }
+            return false;
+        }else {
+            for (String symbol : input) {
+                if (alphabet.contains(symbol)) {
+                    System.out.println("Новая итерация");
+                    System.out.println("Текущие состояния: " + currentStates);
+                    System.out.println("Входной символ: " + symbol);
+                    for (String state : currentStates) {
+                        currentStates.addAll(findEpsilonClosure(state));
                     }
-                }
-                if (newCurrentStates.isEmpty()) {
+                    Set<String> newCurrentStates = new LinkedHashSet<>();
+                    for (String currentState : currentStates) {
+                        if (transitionTable.get(currentState) != null && transitionTable.get(currentState).containsKey(symbol)) {
+                            newCurrentStates.addAll(transitionTable.get(currentState).get(symbol));
+                        }
+                    }
+                    if (newCurrentStates.isEmpty()) {
+                        return false;
+                    }
+                    currentStates = newCurrentStates;
+                    System.out.println("Переход в состояния: " + currentStates);
+                } else {
                     return false;
                 }
-                currentStates = newCurrentStates;
-                System.out.println("Переход в состояния: "+currentStates);
-            }else{
-                return false;
             }
+            for (String state : currentStates) {
+                if (finalStates.contains(state)) return true;
+            }
+            return false;
         }
-        for (String state : currentStates) {
-            if (finalStates.contains(state)) return true;
-        }
-        return false;
     }
 
     private Set<String> findEpsilonClosure(String targetState) {
